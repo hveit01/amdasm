@@ -1,0 +1,37 @@
+TITLE Tests for constants, expressions 
+;
+; Some test cases to check
+;
+
+; make a simple format
+WORD    16
+
+; some constants
+ZERO:   EQU     H#00
+ONE:    EQU     H#01
+NEG:    EQU     Q#200
+C55:    EQU     H#55
+CAA:    EQU     H#AA
+ALL1:   EQU     B#11111111    
+
+; some formats
+FMTX:   DEF 16X
+
+; try case insensitivity
+FMTC:   def 8x, 8B#00001111
+FMTV:   def 8VH#55,8X
+FMTVX:  def 8VX, 8X
+FMT2V:  def 8VH#33,8VH#CC
+
+; special format to invert substituted value
+FMTINV: def 8V*:H#33, 8X
+
+; special format to negate substituted value
+FMTNEG: def 8V-:H#33, 8X
+
+; special format with double negation
+FMTDIN: def 8X,8V-:H#33-
+
+END
+
+; only empty lines and comments after END

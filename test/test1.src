@@ -1,0 +1,90 @@
+; tests some constant definitions, substitutions, and expressions
+
+
+    ORG H#0
+
+; check X format, and entry point; expect 0000 XXXXXXXXXXXXXXXX
+T0:: FMTX
+
+; check C format; expect 0001 XXXXXXXX00001111
+T1: FMTC
+
+; check variable field filled with X; expect 0002 XXXXXXXXXXXXXXXX
+T2: FMTVX
+
+; check variable field filled with constant; expect 0003 10101010XXXXXXXX
+T3: FMTVX   CAA
+
+; overlay FMTV and FMTC; expect 0004 0101010100001111
+T4: FMTX & FMTVX C55 & FMTC
+
+; substitute expression; expect 0005 01010110XXXXXXXX
+T5: FMTV ONE + C55
+
+; Use default with 2 arguments; expect 0006 0011001111001100
+T6: FMT2V
+
+; substitute with skipped argument; expect 0007 0011001101010101
+T7: FMT2V   ,C55
+
+; substitute a constant; expect 0008 11100111XXXXXXXX
+T8:     FMTV    H#E7
+
+; substitute the current location; expect 0009 00001001XXXXXXXX
+T9:     FMTV    $
+
+; substitute field inverted, negated; expect 000a 11001100XXXXXXXX
+T10:    FMTINV
+
+; substitute field inverted, negated; expect 000b 11001101XXXXXXXX
+T11:        FMTNEG
+
+; substitute field inverted, negated; expect 000c 11111101XXXXXXXX
+T12:    FMTINV H#02
+
+; substitute field inverted, negated; expect 000d 11111111XXXXXXXX
+T13:    FMTNEG H#01
+
+; substitute with double inversion; expect 000e XXXXXXXX00110011
+T14:    FMTDIN
+
+; load value into negating VField; expect 000f XXXXXXXX11001101
+T15:    FMTDIN H#33
+
+; load $ expression; expect 0010 00001100XXXXXXXX
+T16:    FMTV    $-4
+
+; check expression left-to-right; expect 0011 00011011XXXXXXXX
+T17:    FMTV    4+5*3
+
+; check forward reference; expect 0012 00010011XXXXXXXX
+;                                 0013 XXXXXXXXXXXXXXXX
+T18:    FMTV    T16
+T19:    FMTX
+
+; add new declaration; expect 0014 11111111XXXXXXXX
+; 255 triggers untyped constant anachronism in phase 2
+ZZZ:    EQU     255
+T20:    FMTV    ZZZ
+
+; accept reserved word if it is a label; expect 0015 00010110XXXXXXXX
+;                                               0016 XXXXXXXXXXXXXXXX
+T21:    FMTV    END
+END:    FMTX
+
+; substitute an untyped value; expect 0017 00101010XXXXXXXX
+T23:    FMTV    2A
+
+; use a free-format definition; expect 0018 X0100010100110XX
+;                                      0019 010111XXXXXXXXXX
+;                                      001A XXXX00010110XXXX
+T24:    FF  1X,H#45,5D#6,2X
+T25:    FF  6($-1),10X
+T26:    FF  4X,8(END),4X
+
+
+; end of tests
+
+END
+
+; nothing relevant allowed after END
