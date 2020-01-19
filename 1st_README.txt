@@ -58,7 +58,7 @@ library, no templates - not because I do not know about it, but to
 provide a high degree of portability.
 
 However, I didn't bother to create the also modern autoconf/automake
-builder files - unless you have the latest version of Linux running, they
+builder files - unless you have the correct version of Linux running, they
 - despite of the intention to be portable - have caused the worst
 installation nightmares for me within the last decades. Don't ask further.
 What you get is a plain old Makefile, which should (after two simple manual
@@ -128,6 +128,14 @@ Then you run it with
 This will, provided there are no errors, write the two print files
 MYFILE.p1l und MYFILE.p2l, which will resemble the normal output of
 the original program.
+
+The above command is entirely quiet. To get a hint of what it does,
+add the option -v, as in 
+	amdadm -v MYFILE
+
+To see even more, use the options -d1, -d2, -d4, -d8, or even -d15 ...
+Better don't do this ;-)
+
 Use at least one output option, e.g. "-om MYFILE.map", otherwise no
 output will be produced. Multiple output options are allowed. Be aware
 that while the standard argument (MYFILE) will silently add the
@@ -136,7 +144,7 @@ explicit naming; a "-om MYFILE -obp MYFILE" will first produce a
 MAP output file MYFILE and then directly overwrites it with the BPNF output.
 
 When using -S and -D options, the default print files are AMDOUT.p1l/.p2l
-unless explicitly named with the -1 and -2 options.
+unless explicitly renamed with the -1 and -2 options.
 
 
 
@@ -165,7 +173,7 @@ Version history
 
 1.0     20190910    Initial version
 1.0.1   20190911    Fixed non-portable itoa()
-1.0.2	20190912	Remove linewrap for MAP output (-om)
+1.0.2	20190912	Removed linewrap for MAP output (-om)
 
   
 
